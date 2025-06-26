@@ -19,7 +19,7 @@
 			isLoading = false;
 			return;
 		}
-		const repo = url.pathname.substring(1);
+		const repo = url.pathname.substring(1).toLowerCase();
 		// check if repo is public via GitHub API
 		const response = await fetch(`/api/verify-repo?repo=${repo}`);
 		if (response.status !== 200) {
@@ -27,8 +27,14 @@
 			isLoading = false;
 			return;
 		}
-		// use OpenAI to generate docs data
-		const dbResponse = await fetch(`api/generate?repo=${repo}`);
+		// check if repo is already in db, if so fetch the data
+		const dbResponse = await fetch(`api/db-repo-fetch?repo=${repo}`);
+		const body = await dbResponse.json();
+		console.log(body);
+		if (body === null) {
+			// use OpenAI to generate docs data
+			const genResponse = await fetch(`api/generate?repo=${repo}`);
+		}
 		isLoading = false;
 	}
 </script>
@@ -58,6 +64,8 @@
 			class="w-full"
 		/>
 		<p class="text-xs">This must be a public GitHub repo</p>
-		<Button type="submit" class="mt-2 w-full" disabled={isLoading}>Submit</Button>
+		<Button type="submit" class="mt-2 w-full" disabled={isLoading}>
+			{isLoading ? "Generating..." : "Generate"}
+		</Button>
 	</form>
 </div>
