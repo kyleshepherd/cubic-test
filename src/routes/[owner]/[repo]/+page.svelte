@@ -8,6 +8,8 @@
 
 	const { owner, repo } = data;
 
+	let repoContents = $derived($docDataStore?.contents);
+
 	onMount(() => {
 		if ($docDataStore === null || $docDataStore?.repo !== `${owner}/${repo}`) {
 			goto("/");

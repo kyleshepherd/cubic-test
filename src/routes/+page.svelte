@@ -5,6 +5,7 @@
 	import AlertCircleIcon from "@lucide/svelte/icons/alert-circle";
 	import { docDataStore } from "$lib/stores/docData";
 	import { goto } from "$app/navigation";
+	import Header from "$lib/components/Header/Header.svelte";
 
 	let repoUrl = $state("");
 	let error = $state("");
@@ -59,6 +60,8 @@
 
 	$inspect($docDataStore);
 </script>
+
+<Header />
 
 <div class="flex min-h-screen flex-col items-start px-4 pt-24">
 	{#if error}
