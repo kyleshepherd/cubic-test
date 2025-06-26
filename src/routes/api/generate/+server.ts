@@ -18,7 +18,7 @@ export const GET = async ({ url }) => {
 	try {
 		const response = await client.responses.create({
 			model: "o4-mini",
-			input: `Analyse this GitHub repo ${repo} and generate documentation for the repo for the purpose of a repository wiki. Identify high-level subsystems, balancing both feature-driven and technical perspectives—such as key features, user services, authentication flows, data layers, CLI tools, or core architectural components. At the top level, include the repo name, repo owner, link to the repo and a concise description of the repo. Also generate an architecture diagram using Mermaid for the repo. Include a concise description of each subsystem, a list of public interfaces and entry points in the subsystem, each with links back to the specific line(s)/file(s) of the repo. Also generate architecture diagrams using Mermaid for each subsystem. Format the data in the structure of the JSON object below to ensure consistency, so that the wiki layer can consume, giving each subsystem a slug-style ID for routing purposes. Don't include the wrapping \`\`\`json or \`\`\` at the start or end of the response.
+			input: `Analyse this GitHub repo ${repo} and generate documentation for the repo for the purpose of a repository wiki. Identify high-level subsystems, balancing both feature-driven and technical perspectives—such as key features, user services, authentication flows, data layers, CLI tools, or core architectural components. At the top level, include the repo name, repo owner, link to the repo and a concise description of the repo. Also generate an architecture diagram using Mermaid for the repo. Include a concise description of each subsystem, a list of public interfaces and entry points in the subsystem, each with links back to the specific line(s)/file(s) of the repo. Also generate architecture diagrams using Mermaid for each subsystem. Format the data in the structure of the JSON object below to ensure consistency, so that the wiki layer can consume, giving each subsystem a slug-style ID for routing purposes. Don't include the wrapping \`\`\`json or \`\`\` at the start or end of the response. Don't wrap any of the architecture diagrams in \`\`\`mermaid or \`\`\` at the start or end of the response, also don't include any functions that would cause errors.
 
 
 			JSON format:
@@ -58,7 +58,6 @@ export const GET = async ({ url }) => {
 			`,
 		});
 		responseText = response.output_text;
-		console.log(responseText);
 	} catch (error) {
 		return json({ error: error }, { status: 500 });
 	}

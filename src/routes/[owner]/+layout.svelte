@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { docDataStore } from "$lib/stores/docData";
-	import RepoInfo from "$lib/components/RepoInfo/RepoInfo.svelte";
 	import * as Sidebar from "$lib/components/ui/sidebar/index.js";
 	import DocsSidebar from "$lib/components/DocsSidebar/DocsSidebar.svelte";
 	import Header from "$lib/components/Header/Header.svelte";
+	import Wrapper from "$lib/components/Wrapper/Wrapper.svelte";
 
 	let { children } = $props();
 
@@ -18,13 +18,15 @@
 		<Sidebar.Trigger />
 		<Header />
 		{#if repoContents}
-			<RepoInfo
-				owner={repoContents.repo.owner}
-				name={repoContents.repo.name}
-				link={repoContents.repo.link}
-				description={repoContents.repo.description}
-				diagram={repoContents.architectureDiagram}
-			/>
+			<Wrapper>
+				<div>
+					<h1 class="text-3xl font-bold">
+						<a href={repoContents.repo.link} target="_blank" rel="noopener noreferrer">
+							{repoContents.repo.owner}/{repoContents.repo.name}
+						</a>
+					</h1>
+				</div>
+			</Wrapper>
 		{/if}
 		{@render children?.()}
 	</main>

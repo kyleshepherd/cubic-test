@@ -33,7 +33,7 @@
 		// check if repo is already in db, if so fetch the data
 		const dbResponse = await fetch(`api/db-repo-fetch?repo=${repo}`);
 		const body = await dbResponse.json();
-		let docData: any | null = body.data;
+		let docData: any | null = body?.data || null;
 		if (docData === null) {
 			// use OpenAI to generate docs data
 			const genResponse = await fetch(`api/generate?repo=${repo}`);
@@ -57,8 +57,6 @@
 		}
 		isLoading = false;
 	}
-
-	$inspect($docDataStore);
 </script>
 
 <Header />
