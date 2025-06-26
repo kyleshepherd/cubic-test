@@ -3,7 +3,8 @@
 	import { Button } from "$lib/components/ui/button";
 	import * as Alert from "$lib/components/ui/alert/index.js";
 	import AlertCircleIcon from "@lucide/svelte/icons/alert-circle";
-	import { docDataStore, type DocData } from "$lib/stores/docData";
+	import { docDataStore } from "$lib/stores/docData";
+	import { goto } from "$app/navigation";
 
 	let repoUrl = $state("");
 	let error = $state("");
@@ -31,14 +32,28 @@
 		// check if repo is already in db, if so fetch the data
 		const dbResponse = await fetch(`api/db-repo-fetch?repo=${repo}`);
 		const body = await dbResponse.json();
-		let docData: DocData | null = body.data;
+		let docData: any | null = body.data;
 		if (docData === null) {
 			// use OpenAI to generate docs data
 			const genResponse = await fetch(`api/generate?repo=${repo}`);
 			const genBody = await genResponse.json();
 			docData = genBody.data;
 		}
-		docDataStore.set(docData);
+		if (docData !== null) {
+			docDataStore.set({
+				repo: docData.name,
+				createdAt: docData.created_at,
+				updatedAt: docData.updated_at,
+				contents: JSON.parse(docData.content),
+			});
+			goto(`/${repo}`);
+			isLoading = false;
+		} else {
+			docDataStore.set(null);
+			error = "Failed to generate docs, please try again";
+			isLoading = false;
+			return;
+		}
 		isLoading = false;
 	}
 
