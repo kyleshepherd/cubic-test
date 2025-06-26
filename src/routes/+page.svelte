@@ -19,6 +19,17 @@
 			isLoading = false;
 			return;
 		}
+		const repo = url.pathname.substring(1);
+		// check if repo is public via GitHub API
+		const response = await fetch(`/api/verify-repo?repo=${repo}`);
+		if (response.status !== 200) {
+			error = "Failed to check repo, make sure the the repo is public";
+			isLoading = false;
+			return;
+		}
+		// use OpenAI to generate docs data
+		const dbResponse = await fetch(`api/generate?repo=${repo}`);
+		isLoading = false;
 	}
 </script>
 
